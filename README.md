@@ -1,2 +1,3 @@
-# daaw23jwt
-jwt token implimentation for daa w23
+# geminstaller
+installer package for gemvc framework
+copy config.php in app directoy and change variables as you need

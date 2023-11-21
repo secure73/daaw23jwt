@@ -1,0 +1,27 @@
+{
+    "name": "gemvc/installer",
+    "description": "Super light project based on Gemvc Framework",
+    "type": "project",
+    "require": {
+        "gemvc/framework": "^2.0"
+    },
+    "license": "Apache-2.0",
+    "autoload": {
+        "psr-4": {
+        },
+        "files": [
+            "app/config.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Ali Khorsandfard",
+            "email": "secure73@gmail.com"
+        },
+        {
+            "name": "Roboxon",
+            "email": "roboxon@roboxon.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
