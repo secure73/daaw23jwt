@@ -14,4 +14,16 @@ class IndexController extends Controller
         $this->response->success($this->request);
         return $this->response;
     }
+
+    public function hello():JsonResponse
+    {
+        $this->response->success("Hello World");
+        return $this->response;
+    }
+
+    public function testError():JsonResponse
+    {
+        $this->response->internalError("Not Found Test Error");
+        return $this->response;
+    }
 }
