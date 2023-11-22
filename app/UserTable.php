@@ -1,8 +1,8 @@
 <?php
 use GemLibrary\Database\PdoConnection;
+use GemLibrary\Database\PdoQuery;
 
-
-class UserTable extends PdoConnection
+class UserTable extends PdoQuery
 {
     public int    $id;
     public string $email;
@@ -18,6 +18,9 @@ class UserTable extends PdoConnection
 
     public function insertUser(): int|false
     {
+
+        //$result  = $this->insertQuery("INSERT INTO users (email , password ) values (:email , :password)" ,$array);
+
         if ($this->isConnected()) {
             $this->query("INSERT INTO users (email , password ) values (:email , :password)");
             $this->bind(':email', $this->email);
