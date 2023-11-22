@@ -21,12 +21,11 @@ class UserTable extends PdoConnection
         if ($this->isConnected()) {
             $this->query("INSERT INTO users (email , password ) values (:email , :password)");
             $this->bind(':email', $this->email);
-            $db_connect->bind(':password', $this->password);
-            if ($db_connect->execute()) {
-                return (int)$db_connect->lastInsertId();
+            $this->bind(':password', $this->password);
+            if ($this->execute()) {
+                return $this->lastInsertId();
             }
         }
-        $this->error = $db_connect->getError();
         return false;
     }
 
