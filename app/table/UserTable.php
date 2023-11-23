@@ -1,14 +1,14 @@
 <?php
-
+namespace App\Table;
 use GemLibrary\Database\PdoQuery;
 
 class UserTable extends PdoQuery
 {
-    public int    $id;
-    public string $email;
-    protected string $password;
-    public ?string $first_name;
-    public ?string $last_name;
+    public int        $id;
+    public string     $email;
+    protected string  $password;
+    public ?string    $first_name;
+    public ?string    $last_name;
 
 
     public function __construct()
