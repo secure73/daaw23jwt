@@ -4,6 +4,7 @@ namespace App\Model;
 use GemLibrary\Helper\WebHelper;
 use App\Table\UserTable;
 use GemLibrary\Http\GemRequest;
+use GemLibrary\Http\GemToken;
 use GemLibrary\Http\JsonResponse;
 
 class UserModel extends UserTable
@@ -49,7 +50,7 @@ class UserModel extends UserTable
         {
             if(password_verify($this->password, $user->password))
             {
-                $response->success($user, 1, 'login successfully');
+                $response->success(TokenModel::refresh($user->id,$request->userMachine), 1, 'login successfully');
                 return $response;
             }
             $response->badRequest('password is not valid');
