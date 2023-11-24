@@ -1,7 +1,6 @@
 <?php
 namespace App\Table;
 use GemLibrary\Database\PdoQuery;
-use GuzzleHttp\RetryMiddleware;
 
 class UserTable extends PdoQuery
 {
