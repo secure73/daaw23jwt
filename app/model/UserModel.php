@@ -40,4 +40,23 @@ class UserModel extends UserTable
         return $response;
     }
 
+    public function login(GemRequest $request):JsonResponse
+    {
+        $response = new JsonResponse();
+        $this->password = $request->post['password'];
+        $user = $this->selectUserByEmail($request->post['email']);
+        if($user)
+        {
+            if(password_verify($this->password, $user->password))
+            {
+                $response->success($user, 1, 'login successfully');
+                return $response;
+            }
+            $response->badRequest('password is not valid');
+            return $response;
+        }
+        $response->badRequest('email is not valid');
+        return $response;
+    }
+
 } 

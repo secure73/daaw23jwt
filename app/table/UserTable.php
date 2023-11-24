@@ -1,6 +1,7 @@
 <?php
 namespace App\Table;
 use GemLibrary\Database\PdoQuery;
+use GuzzleHttp\RetryMiddleware;
 
 class UserTable extends PdoQuery
 {
@@ -23,8 +24,17 @@ class UserTable extends PdoQuery
          [':email' => $this->email, ':password' => $this->password]);
     }
 
-    public function selectUserByEmail(?string $email = null): array|false
+    /**
+     * @param string|null $email
+     * @return object|false
+     */
+    public function selectUserByEmail(string $email): object|false
     {
-        return $this->selectQuery("SELECT * from users WHERE email = :email",[':email'=>$email]);
+        $result = $this->selectQueryObjets("SELECT * FROM users WHERE email = :email", [':email' => $email]);
+        if($result && count($result) ==1)
+        {
+            return $result[0];
+        }
+        return false;
     }
 }

@@ -29,4 +29,16 @@ class AuthController extends Controller
         $user = new UserModel();
         return  $user->createUser($this->request);
     }
+
+    public function login():JsonResponse
+    {
+        if (!$this->request->definePostSchema(
+            ['email' => 'email', 
+            'password' => 'string'])) {
+            $this->response->badRequest($this->request->error);
+            return $this->response;
+        }
+        $user = new UserModel();
+        return  $user->login($this->request);
+    }
 }
