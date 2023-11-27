@@ -7,6 +7,8 @@ $dotenv->load();
 use GemLibrary\Helper\NoCors;
 use GemFramework\Core\Bootstrap;
 use GemLibrary\Http\ApacheRequest;
+use GemLibrary\Http\JsonResponse;
+
 
 NoCors::NoCors();
 $serverRequest = new ApacheRequest();
@@ -22,12 +24,17 @@ if($controller == 'auth')
 }
 else
 {
-    //check for token
-    //if token valid 
-    //run app
-    //$bootstrap = new Bootstrap($serverRequest->request);
+    $jsonResponse = new JsonResponse();
+    //check it is found Authorization header
+    if(!isset($serverRequest->request->authorizationHeader))
+    {
+       $jsonResponse->forbidden('no token found in authorization header');
+       $jsonResponse->show();
+       die; 
+    }
 
-    echo "try to visit protectd Route";
+    $jsonResponse->success($serverRequest->request->authorizationHeader);
+    $jsonResponse->show();
 }
 
 
