@@ -50,7 +50,8 @@ class UserModel extends UserTable
         {
             if(password_verify($this->password, $user->password))
             {
-                $response->success(TokenModel::refresh($user->id,$request->userMachine), 1, 'login successfully');
+                $tokenModel = new TokenModel();
+                $response->success($tokenModel->createToken($user->id, $request->userMachine), 1, 'login successfully');
                 return $response;
             }
             $response->badRequest('password is not valid');

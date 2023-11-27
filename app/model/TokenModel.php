@@ -2,22 +2,20 @@
 
 namespace App\Model;
 use GemLibrary\Http\GemToken;
-class TokenModel
+class TokenModel extends GemToken
 {
     public function __construct()
     {
+        parent::__construct($_ENV['TOKEN_SECRET'], $_ENV['TOKEN_ISSUER']);
     }
 
-
-    public static function refresh(int $user_id, string $user_agent):string
+    public function createToken(int $user_id, string $user_agent):string
     {
-        return self::createToken('refresh', $user_id, $_ENV['REFRESH_TOKEN_SECOND'],[],$user_agent,null);
+        return $this->create('refresh', $user_id, $_ENV['REFRESH_TOKEN_SECOND'],[],null,$user_agent);
     }
 
-    private static function createToken( string $type , int $user_id, int $validity ,array $payload ,string $user_agent , ?string $user_ip):string
+    public function verifyToken(string $token, string $user_agent):false|GemToken
     {
-        $token = new GemToken();
-       return  $token->create($type,$_ENV['TOKEN_SECRET'],$user_id,$validity,$payload,
-                $_ENV['TOKEN_ISSUER'],$user_ip,$user_agent);
+        return $this->validate($token,null,$user_agent);
     }
 }

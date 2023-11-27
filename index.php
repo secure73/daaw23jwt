@@ -4,42 +4,44 @@ require_once 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
+use App\Model\TokenModel;
 use GemLibrary\Helper\NoCors;
 use GemFramework\Core\Bootstrap;
-use GemLibrary\Helper\WebHelper;
 use GemLibrary\Http\ApacheRequest;
 use GemLibrary\Http\JsonResponse;
 
 
 NoCors::NoCors();
-$serverRequest = new ApacheRequest();
-
-$request = $serverRequest->request;
-$split = explode('/', $request->get['url']);
-$controller = $split[0];
-
-if($controller == 'auth')
+$apache = new ApacheRequest();
+//$request = $apache->request;
+$segment = explode('/',$apache->request->requestedUrl);
+$controller = $segment[$_ENV['URI_CONTROLLER_SEGMENT']] ?? null;
+if(!$controller || $controller == 'auth')
 {
-    $bootstrap = new Bootstrap($serverRequest->request);
-    return;
+    $bootstrap = new Bootstrap($apache->request);
+    die;
 }
 else
 {
     $jsonResponse = new JsonResponse();
+    $token = $request['authorizationHeader'] ?? null;
     //check it is found Authorization header
-    if(!isset($serverRequest->request->authorizationHeader))
+    if(!$token)
     {
        $jsonResponse->forbidden('no token found in authorization header');
        $jsonResponse->show();
        die; 
     }
-
     //check it is valid token
-    $token = $serverRequest->request->authorizationHeader;
-    $token  = WebHelper::BearerTokenPurify($token);
-
-    $jsonResponse->success($token);
-    $jsonResponse->show();
+    $ins_token = new TokenModel();
+    if(!$$ins_token->verifyToken($token, $request->userMachine))
+    {
+        $jsonResponse->forbidden('token validation failed');
+        $jsonResponse->show();
+        die;
+    }
+    //now token is valid and user can run request
+    $bootstrap = new Bootstrap($serverRequest->request);
 }
 
 
