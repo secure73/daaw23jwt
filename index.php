@@ -10,4 +10,24 @@ use GemLibrary\Http\ApacheRequest;
 
 NoCors::NoCors();
 $serverRequest = new ApacheRequest();
-$bootstrap = new Bootstrap($serverRequest->request);
+
+$request = $serverRequest->request;
+$split = explode('/', $request->get['url']);
+$controller = $split[0];
+
+if($controller == 'auth')
+{
+    $bootstrap = new Bootstrap($serverRequest->request);
+    return;
+}
+else
+{
+    //check for token
+    //if token valid 
+    //run app
+    //$bootstrap = new Bootstrap($serverRequest->request);
+
+    echo "try to visit protectd Route";
+}
+
+
