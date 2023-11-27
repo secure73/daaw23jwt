@@ -6,6 +6,7 @@ $dotenv->load();
 
 use GemLibrary\Helper\NoCors;
 use GemFramework\Core\Bootstrap;
+use GemLibrary\Helper\WebHelper;
 use GemLibrary\Http\ApacheRequest;
 use GemLibrary\Http\JsonResponse;
 
@@ -33,7 +34,11 @@ else
        die; 
     }
 
-    $jsonResponse->success($serverRequest->request->authorizationHeader);
+    //check it is valid token
+    $token = $serverRequest->request->authorizationHeader;
+    $token  = WebHelper::BearerTokenPurify($token);
+
+    $jsonResponse->success($token);
     $jsonResponse->show();
 }
 
