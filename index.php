@@ -7,13 +7,14 @@ $dotenv->load();
 use App\Model\TokenModel;
 use GemLibrary\Helper\NoCors;
 use GemFramework\Core\Bootstrap;
+use GemLibrary\Helper\WebHelper;
 use GemLibrary\Http\ApacheRequest;
 use GemLibrary\Http\JsonResponse;
 
 
 NoCors::NoCors();
 $apache = new ApacheRequest();
-//$request = $apache->request;
+$request = $apache->request;
 $segment = explode('/',$apache->request->requestedUrl);
 $controller = $segment[$_ENV['URI_CONTROLLER_SEGMENT']] ?? null;
 if(!$controller || $controller == 'auth')
@@ -24,7 +25,7 @@ if(!$controller || $controller == 'auth')
 else
 {
     $jsonResponse = new JsonResponse();
-    $token = $request['authorizationHeader'] ?? null;
+    $token = $request->authorizationHeader ?? null;
     //check it is found Authorization header
     if(!$token)
     {
@@ -32,16 +33,23 @@ else
        $jsonResponse->show();
        die; 
     }
-    //check it is valid token
+    //check if Bearer Token it is settes
+    $token = WebHelper::BearerTokenPurify($token);
+    if(!$token)
+    {
+        $jsonResponse->forbidden('Bearer token is not setted');
+        $jsonResponse->show();
+        die;
+    }
     $ins_token = new TokenModel();
-    if(!$$ins_token->verifyToken($token, $request->userMachine))
+    if($ins_token->verifyToken($token, $request->userMachine) == false)
     {
         $jsonResponse->forbidden('token validation failed');
         $jsonResponse->show();
         die;
     }
     //now token is valid and user can run request
-    $bootstrap = new Bootstrap($serverRequest->request);
+    $bootstrap = new Bootstrap($apache->request);
 }
 
 

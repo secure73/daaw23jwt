@@ -14,7 +14,7 @@ class TokenModel extends GemToken
         return $this->create('refresh', $user_id, $_ENV['REFRESH_TOKEN_SECOND'],[],null,$user_agent);
     }
 
-    public function verifyToken(string $token, string $user_agent):false|GemToken
+    public function verifyToken(string $token, string $user_agent):bool
     {
         return $this->validate($token,null,$user_agent);
     }
