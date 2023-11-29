@@ -22,6 +22,7 @@ if(!$controller || $controller == 'auth')
     $bootstrap = new Bootstrap($apache->request);
     die;
 }
+//means other route rather than index and auth controller
 else
 {
     $jsonResponse = new JsonResponse();
@@ -41,8 +42,9 @@ else
         $jsonResponse->show();
         die;
     }
+    //it means now token is setted and we can verify it
     $ins_token = new TokenModel();
-    if($ins_token->verifyToken($token, $request->userMachine) == false)
+    if(!$ins_token->verifyToken($token, $request->userMachine))
     {
         $jsonResponse->forbidden('token validation failed');
         $jsonResponse->show();
