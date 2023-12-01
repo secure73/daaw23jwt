@@ -3,5 +3,5 @@ services:
   webserver:
     image: daajwt23
     ports:
-      - "8888:80"
+      - "8080:80"
     container_name: our_app
