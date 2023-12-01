@@ -1,7 +1,12 @@
 version: "3.5"
 services:
   webserver:
-    image: daajwt23
+    image: secure73/daajwt23
     ports:
       - "8080:80"
     container_name: our_app
+  frontend:
+    image: secure73/react_app
+    ports:
+      - "8888:3000"
+    container_name: our_frontend
